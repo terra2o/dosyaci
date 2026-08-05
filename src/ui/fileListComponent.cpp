@@ -29,7 +29,10 @@ void FileListComponent::setFile(const std::filesystem::path& dir)
 
 ftxui::Element FileListComponent::Render()
 {
-    return menu_->Render();
+    return menu_->Render()
+        | ftxui::vscroll_indicator
+        | ftxui::frame
+        | ftxui::border;
 }
 
 }
