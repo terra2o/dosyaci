@@ -4,24 +4,30 @@
 
 #include "core/directoryReader.hpp"
 #include "core/fileEntry.hpp"
+#include "core/eventHandler.hpp"
 
 namespace dosyaci
 {
+using namespace ftxui;
 
-class FileListComponent : public ftxui::ComponentBase
+class FileListComponent : public ComponentBase
 {
     std::vector<FileEntry> files;
     std::vector<std::string> labels_;
-    ftxui::Component menu_;
+    Component menu_;
     int selected_{0};
+    EventHandler eventHandler_;
 
 
 public:
-    explicit FileListComponent(ftxui::MenuOption menu);
+    explicit FileListComponent(MenuOption menu);
 
     const std::vector<FileEntry>& getFile();
     void setFile(const std::filesystem::path& dir);
-    ftxui::Element Render() override;
+    Element Render() override;
+
+
+    bool OnEvent(Event event) override;
 };
 
 }

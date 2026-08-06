@@ -4,6 +4,7 @@
 
 #include "ui/fileListComponent.hpp"
 #include "core/fileEntryFormat.hpp"
+#include "core/eventHandler.hpp"
 
 namespace dosyaci
 {
@@ -33,6 +34,38 @@ ftxui::Element FileListComponent::Render()
         | ftxui::vscroll_indicator
         | ftxui::frame
         | ftxui::border;
+}
+
+bool FileListComponent::OnEvent(Event event)
+{
+    const DispatchResult result{ eventHandler_.Handle(event) };
+
+    switch (result.action)
+    {
+        case Action::MoveDown:
+            for (int i = 0; i < result.count; ++i)
+                menu_->OnEvent(Event::ArrowDown);
+            return true;
+
+        case Action::MoveUp:
+            for (int i = 0; i < result.count; ++i)
+                menu_->OnEvent(Event::ArrowUp);
+            return true;
+
+        case Action::GoToTop:
+            OnEvent(Event::Home);
+            return true;
+
+        case Action::GoToBottom:
+            OnEvent(Event::End);
+            return true;
+
+        case Action::None:
+        default:
+            break;
+    }
+
+    return menu_->OnEvent(event);
 }
 
 }
