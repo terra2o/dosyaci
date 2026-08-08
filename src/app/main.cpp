@@ -23,9 +23,9 @@ int main(int argc, char *argv[])
     auto fileList = Make<dosyaci::FileListComponent>(MenuOption::VerticalAnimated());
 
     if (argc == 1)
-        fileList->setFile(std::filesystem::current_path());
+        fileList->setDir(std::filesystem::current_path());
     else if (argc == 2)
-        fileList->setFile(argv[1]);
+        fileList->setDir(argv[1]);
 
     auto screen = ScreenInteractive::Fullscreen();
     screen.Loop(fileList);

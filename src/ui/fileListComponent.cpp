@@ -15,12 +15,12 @@ FileListComponent::FileListComponent(ftxui::MenuOption menu)
         Add(menu_);
     }
 
-const std::vector<FileEntry>& FileListComponent::getFile()
+const std::vector<FileEntry>& FileListComponent::getFiles()
 {
     return files;
 }
 
-void FileListComponent::setFile(const std::filesystem::path& dir)
+void FileListComponent::setDir(const std::filesystem::path& dir)
 {
     files = listDirectory(dir);
     labels_.clear();
@@ -42,6 +42,9 @@ bool FileListComponent::OnEvent(Event event)
 
     switch (result.action)
     {
+        // case Action::Enter:
+        //     if (
+        //     return true
         case Action::MoveDown:
             for (int i = 0; i < result.count; ++i)
                 menu_->OnEvent(Event::ArrowDown);

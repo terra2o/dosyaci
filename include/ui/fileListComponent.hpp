@@ -22,8 +22,8 @@ class FileListComponent : public ComponentBase
 public:
     explicit FileListComponent(MenuOption menu);
 
-    const std::vector<FileEntry>& getFile();
-    void setFile(const std::filesystem::path& dir);
+    const std::vector<FileEntry>& getFiles();
+    void setDir(const std::filesystem::path& dir);
     Element Render() override;
 
 
