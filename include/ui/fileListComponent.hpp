@@ -2,7 +2,6 @@
 
 #include <ftxui/component/component.hpp>
 
-#include "core/directoryReader.hpp"
 #include "core/fileEntry.hpp"
 #include "core/eventHandler.hpp"
 
@@ -17,6 +16,7 @@ class FileListComponent : public ComponentBase
     Component menu_;
     int selected_{0};
     EventHandler eventHandler_;
+    std::filesystem::path currentDir_;
 
 
 public:
@@ -24,6 +24,8 @@ public:
 
     const std::vector<FileEntry>& getFiles();
     void setDir(const std::filesystem::path& dir);
+    FileEntry getSelectedFileEntry();
+    void execute(const std::filesystem::path& path);
     Element Render() override;
 
 

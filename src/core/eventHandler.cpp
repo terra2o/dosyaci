@@ -34,26 +34,44 @@ bool EventHandler::handleNormal(Event event, DispatchResult& result)
     if (tryConsumeCount(event).has_value())
         return true;
 
-    const int count{ pendingCount_ > 0 ? pendingCount_ : 1};
+    const int count{ pendingCount_ > 0 ? pendingCount_ : 1 };
+
+    if (event == Event::Return)
+    {
+        result.action = Action::Enter;
+        result.count = count;
+        resetPending();
+        return true;
+    }
+    if (event == Event::Character('l') || event == Event::ArrowRight)
+    {
+        result.action = Action::MoveRight;
+        result.count = count;
+        resetPending();
+        return true;
+    }
+    if (event == Event::Character('h') || event == Event::ArrowLeft)
+    {
+        result.action = Action::MoveLeft;
+        result.count = count;
+        resetPending();
+        return true;
+    }
 
     if (event.is_character())
     {
         pendingSequence_ += event.input();
-
         if (pendingSequence_ == "g")
-            return true; // wait for second 'g'
-
+            return true;
         if (pendingSequence_ == "gg")
         {
             result.action = Action::GoToTop;
             result.count = count;
-            EventHandler::resetPending();
+            resetPending();
             return true;
         }
-
-        EventHandler::resetPending();
+        resetPending();
     }
-
     return false;
 }
 

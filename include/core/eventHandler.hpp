@@ -26,6 +26,7 @@ public:
     DispatchResult Handle(Event event);
 
 private:
+    bool resetPendingAndSetCount(Event event, DispatchResult& result, const int& count);
     bool handleNormal(Event event, DispatchResult& result);
     bool handleCommand(Event event, DispatchResult& result); // vim-like commands
 
