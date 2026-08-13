@@ -24,6 +24,8 @@ class EventHandler
 
 public:
     DispatchResult Handle(Event event);
+    std::string getCommandBuffer();
+    Mode getMode();
 
 private:
     bool resetPendingAndSetCount(Event event, DispatchResult& result, const int& count);

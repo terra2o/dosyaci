@@ -4,6 +4,7 @@
 
 #include "core/fileEntry.hpp"
 #include "core/eventHandler.hpp"
+#include "ui/commandInputComponent.hpp"
 
 namespace dosyaci
 {
@@ -16,6 +17,7 @@ class FileListComponent : public ComponentBase
     Component menu_;
     int selected_{0};
     EventHandler eventHandler_;
+    Component commandInput_;
     std::filesystem::path currentDir_;
 
 

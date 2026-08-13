@@ -29,6 +29,16 @@ DispatchResult EventHandler::Handle(Event event)
     return result;
 }
 
+std::string EventHandler::getCommandBuffer()
+{
+    return commandBuffer_;
+}
+
+Mode EventHandler::getMode()
+{
+    return mode_;
+}
+
 bool EventHandler::handleNormal(Event event, DispatchResult& result)
 {
     if (tryConsumeCount(event).has_value())
@@ -36,6 +46,14 @@ bool EventHandler::handleNormal(Event event, DispatchResult& result)
 
     const int count{ pendingCount_ > 0 ? pendingCount_ : 1 };
 
+    if (event == Event::Character(':'))
+    {
+        result.action = Action::EnterCommandMode;
+        mode_ = Mode::Command;
+        result.count = count;
+        resetPending();
+        return true;
+    }
     if (event == Event::Return)
     {
         result.action = Action::Enter;
@@ -85,7 +103,7 @@ bool EventHandler::handleCommand(Event event, DispatchResult& result)
         if (commandBuffer_ == "q")
         {
             result.action = Action::Quit;
-            EventHandler::resetBuffer();
+            resetBuffer();
             return true;
         }
     }

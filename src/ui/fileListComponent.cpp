@@ -4,17 +4,22 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+#include <ftxui/component/screen_interactive.hpp>
+
 #include "ui/fileListComponent.hpp"
+#include "ui/commandInputComponent.hpp"
 #include "core/directoryReader.hpp"
 #include "core/fileEntryFormat.hpp"
 #include "core/fileEntry.hpp"
 #include "core/eventHandler.hpp"
+#include "core/mode.hpp"
 
 namespace dosyaci
 {
 
 FileListComponent::FileListComponent(ftxui::MenuOption menu)
-    : menu_ ( ftxui::Menu(&labels_, &selected_, menu) )
+    : menu_ ( ftxui::Menu(&labels_, &selected_, menu) ),
+      commandInput_ ( ftxui::Make<CommandInputComponent>(eventHandler_) )
     {
         Add(menu_);
     }
@@ -48,10 +53,15 @@ void FileListComponent::execute(const std::filesystem::path& path)
 
 ftxui::Element FileListComponent::Render()
 {
-    return menu_->Render()
+    ftxui::Element fileList{ menu_->Render()
         | ftxui::vscroll_indicator
         | ftxui::frame
-        | ftxui::border;
+        | ftxui::border };
+
+    if (eventHandler_.getMode() == Mode::Command)
+        return ftxui::vbox({ fileList, commandInput_->Render() });
+
+    return fileList;
 }
 
 bool FileListComponent::OnEvent(Event event)
@@ -60,6 +70,9 @@ bool FileListComponent::OnEvent(Event event)
 
     switch (result.action)
     {
+        case Action::EnterCommandMode:
+            return true;
+
         case Action::Enter:
             if (getSelectedFileEntry().isDirectory())
                 setDir(getSelectedFileEntry().path);
@@ -94,6 +107,10 @@ bool FileListComponent::OnEvent(Event event)
 
         case Action::GoToBottom:
             OnEvent(Event::End);
+            return true;
+
+        case Action::Quit:
+            ftxui::ScreenInteractive::Active()->Exit();
             return true;
 
         case Action::None:
