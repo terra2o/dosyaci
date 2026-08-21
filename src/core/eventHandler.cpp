@@ -95,14 +95,27 @@ bool EventHandler::handleNormal(Event event, DispatchResult& result)
 
 bool EventHandler::handleCommand(Event event, DispatchResult& result)
 {
-    if (event != Event::Return)
+    if (event == Event::Backspace)
+    {
+        if (!commandBuffer_.empty())
+            commandBuffer_.pop_back();
+    }
+    else if (event != Event::Return)
+    {
         commandBuffer_ += event.input();
+    }
 
     if (event == Event::Return)
     {
         if (commandBuffer_ == "q")
         {
             result.action = Action::Quit;
+            resetBuffer();
+            return true;
+        }
+        // invalid input, just do nothing
+        else
+        {
             resetBuffer();
             return true;
         }
