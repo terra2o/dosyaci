@@ -2,7 +2,10 @@
 
 toy file manager made with C++ and FTXUI
 
-# DISCLAIMER
+## TODO
+- add commands for simple actions such as making a directory
+
+## DISCLAIMER
 this project is very, very, very unfinished.
 
 ## HUMAN DISCLAIMER!
